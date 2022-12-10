@@ -1,10 +1,15 @@
-local addonName, addon = ...
-local log = addon.utils.Logger:new({ prefix = "AhBuy" });
+local addonName, addon = ...;
+local argumentUtils = addon.utils.arguments;
+local patternMatchingUtils = addon.utils.pattern_matching;
+local cmdList = addon.cmd.list;
+local Logger = addon.utils.logging.Logger;
 
-SLASH_AHBUY1 = addon.cmd.list.BUY.DEFAULT;
-SLASH_AHBUY2 = addon.cmd.list.BUY.SHORT;
+local log = Logger:new({ prefix = "AhBuy" });
 
-function SlashCmdList.AHBUY(arguments)
+SLASH_AH_BUY1 = addon.cmd.list.BUY.DEFAULT;
+SLASH_AH_BUY2 = addon.cmd.list.BUY.SHORT;
+
+function SlashCmdList.AH_BUY(arguments)
   if (not AuctionHouseFrame) then
     log:gray("No AH open detected");
     return;
@@ -57,6 +62,13 @@ function selectCommoditiesRow(arguments)
   local isConfirmOnlyEnabled = isConfirmOnly(arguments);
   local isPriceLimitEnabled = hasPriceLimit(arguments);
   local isReloadEnabled = isReload(arguments);
+  local isListLoading = AuctionHouseFrame.CommoditiesBuyFrame.ItemList.LoadingSpinner:IsVisible();
+
+  -- List is loading, skip OPs step
+  if (isListLoading) then
+    log:yellow("Waiting list load, cannot proceed with selection - it is not ready");
+    return;
+  end
 
   -- Select first row automatically if not disabled
   if (not isConfirmOnlyEnabled) then
@@ -68,6 +80,7 @@ function selectCommoditiesRow(arguments)
     end;
   end
 
+  -- Commodity related frames / inputs
   local quantityInput = AuctionHouseFrame.CommoditiesBuyFrame.BuyDisplay.QuantityInput.InputBox;
   local nameInput = AuctionHouseFrame.CommoditiesBuyFrame.BuyDisplay.ItemDisplay.Name;
   local name = nameInput:GetText() or "unknown";
@@ -133,18 +146,18 @@ end
 -- Get parameters for price limiting
 -- ---------------------------------------------------
 function hasPriceLimit(arguments)
-  return addon.cmd.list.hasArgument(arguments, addon.cmd.list.BUY.ARGUMENTS.MAX_PRICE);
+  return argumentUtils.hasArgument(arguments, cmdList.BUY.ARGUMENTS.MAX_PRICE);
 end
 
 -- ---------------------------------------------------
 -- Get parameters for price limiting value
 -- ---------------------------------------------------
 function getPriceLimit(arguments)
-  local pattern = addon.cmd.list.BUY.ARGUMENTS.MAX_PRICE .. "=" .. ".*";
+  local pattern = cmdList.BUY.ARGUMENTS.MAX_PRICE .. "=" .. ".*";
   local limitParam = string.match(arguments, pattern .. "%s") or string.match(arguments, pattern .. "$");
 
   if (limitParam) then
-    local totalPrice = addon.utils.pattern_matching.parse_price_from_arguments(limitParam);
+    local totalPrice = patternMatchingUtils.parse_price_from_arguments(limitParam);
     return totalPrice;
   else
     return 0;
@@ -155,19 +168,19 @@ end
 -- Get parameters for scalp usage
 -- ---------------------------------------------------
 function isScalp(arguments)
-  return addon.cmd.list.hasArgument(arguments, addon.cmd.list.BUY.ARGUMENTS.SCALP);
+  return argumentUtils.hasArgument(arguments, cmdList.BUY.ARGUMENTS.SCALP);
 end
 
 -- ---------------------------------------------------
 -- Get parameters for reload usage
 -- ---------------------------------------------------
 function isReload(arguments)
-  return addon.cmd.list.hasArgument(arguments, addon.cmd.list.BUY.ARGUMENTS.RELOAD);
+  return argumentUtils.hasArgument(arguments, cmdList.BUY.ARGUMENTS.RELOAD);
 end
 
 -- ---------------------------------------------------
 -- Get parameters for confirm only usage
 -- ---------------------------------------------------
 function isConfirmOnly(arguments)
-  return addon.cmd.list.hasArgument(arguments, addon.cmd.list.BUY.ARGUMENTS.CONFIRM_ONLY);
+  return argumentUtils.hasArgument(arguments, cmdList.BUY.ARGUMENTS.CONFIRM_ONLY);
 end

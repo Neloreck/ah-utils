@@ -1,10 +1,13 @@
-local addonName, addon = ...
-local log = addon.utils.Logger:new({ prefix = "AhUndercut" });
+local addonName, addon = ...;
+local cmdList = addon.cmd.list;
+local Logger = addon.utils.logging.Logger;
 
-SLASH_AHUNDERCUT1 = addon.cmd.list.UNDERCUT.DEFAULT;
-SLASH_AHUNDERCUT2 = addon.cmd.list.UNDERCUT.SHORT;
+local log = Logger:new({ prefix = "AhUndercut" });
 
-function SlashCmdList.AHUNDERCUT()
+SLASH_AH_UNDERCUT1 = cmdList.UNDERCUT.DEFAULT;
+SLASH_AH_UNDERCUT2 = cmdList.UNDERCUT.SHORT;
+
+function SlashCmdList.AH_UNDERCUT()
   if (not AuctionHouseFrame) then
     log:gray("No AH open detected");
     return;

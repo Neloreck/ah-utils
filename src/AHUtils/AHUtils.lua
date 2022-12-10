@@ -1,4 +1,4 @@
-local addonName, addon = ...
+local addonName, addon = ...;
 
 -- Declare modules
 

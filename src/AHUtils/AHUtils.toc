@@ -5,12 +5,13 @@
 
 AHUtils.lua
 
+utils\arguments.lua
+utils\color.lua
+utils\logging.lua
 utils\pattern_matching.lua
-utils\EColor.lua
-utils\Logger.lua
 
 cmd\list.lua
-cmd\AhBuy.lua
-cmd\AhHelp.lua
-cmd\AhRefresh.lua
-cmd\AhUndercut.lua
+cmd\buy.lua
+cmd\help.lua
+cmd\refresh.lua
+cmd\undercut.lua

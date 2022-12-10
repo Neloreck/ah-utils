@@ -1,14 +1,17 @@
-local addonName, addon = ...
-local log = addon.utils.Logger:new({ prefix = "AhHelp" });
+local addonName, addon = ...;
+local cmdList = addon.cmd.list;
+local Logger = addon.utils.logging.Logger;
 
-SLASH_AHHELP1 = addon.cmd.list.HELP.DEFAULT;
-SLASH_AHHELP2 = addon.cmd.list.HELP.SHORT;
+local log = Logger:new({ prefix = "AhHelp" });
 
-function SlashCmdList.AHHELP()
+SLASH_AH_HELP1 = cmdList.HELP.DEFAULT;
+SLASH_AH_HELP2 = cmdList.HELP.SHORT;
+
+function SlashCmdList.AH_HELP()
     log:green("Commands list for AH utils addon:");
     local index = 0;
 
-    for key, it in pairs(addon.cmd.list) do
+    for key, it in pairs(cmdList) do
         local description = it.DEFAULT .. " or " .. it.SHORT .. " - " .. it.DESCRIPTION;
 
         if (index % 2 == 0) then
