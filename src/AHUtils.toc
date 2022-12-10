@@ -1,9 +1,0 @@
-## Interface: 50001
-## Title: AHUtils
-## Author: Neloreck
-## Version: 1.0
-
-AhBuy.lua
-AhRefresh.lua
-AhUndercut.lua
-AhConfirm.lua

@@ -8,8 +8,8 @@ Adds few slash commands for usage in custom macros. Enables keybinds-based contr
 
 ## Commands
 
+ - "/ahhelp" or "/ahh" => list of commands and description for them
  - "/ahbuy" or "/ahb" => automated buy of first (cheapest) row of proposed items, each call processes current step (select first row, click buy, confirm it or dismiss error, select first row...)
- - "/ahconfirm" or "/ahc" => command to by selected item, each call continues further with confirmations (click buy, confirm it or dismiss error, click buy...)
  - "/ahrefresh" or "/ahr" => command to refresh current commodities list
  - "/ahundercut" or "/ahu" => command sell one picked item in a very fast way with price of 1 silver, should be called when commodity is selected for selling (is in sell slot)
 
