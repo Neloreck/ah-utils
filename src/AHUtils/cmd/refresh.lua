@@ -4,9 +4,6 @@ local Logger = addon.utils.logging.Logger;
 
 local log = Logger:new({ prefix = "AhRefresh" });
 
-SLASH_AH_REFRESH1 = cmdList.REFRESH.DEFAULT;
-SLASH_AH_REFRESH2 = cmdList.REFRESH.SHORT;
-
 function SlashCmdList.AH_REFRESH()
   if (not AuctionHouseFrame) then
     log:gray("No AH open detected");

@@ -15,3 +15,5 @@ cmd\buy.lua
 cmd\help.lua
 cmd\refresh.lua
 cmd\undercut.lua
+
+cmd\declaration.lua

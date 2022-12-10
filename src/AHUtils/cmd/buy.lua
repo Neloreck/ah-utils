@@ -6,34 +6,54 @@ local Logger = addon.utils.logging.Logger;
 
 local log = Logger:new({ prefix = "AhBuy" });
 
-SLASH_AH_BUY1 = addon.cmd.list.BUY.DEFAULT;
-SLASH_AH_BUY2 = addon.cmd.list.BUY.SHORT;
+-- ---------------------------------------------------
+-- Get parameters for scalp usage
+-- ---------------------------------------------------
+local function isScalp(arguments)
+  return argumentUtils.hasArgument(arguments, cmdList.BUY.ARGUMENTS.SCALP);
+end
 
-function SlashCmdList.AH_BUY(arguments)
-  if (not AuctionHouseFrame) then
-    log:gray("No AH open detected");
-    return;
+-- ---------------------------------------------------
+-- Get parameters for reload usage
+-- ---------------------------------------------------
+local function isReload(arguments)
+  return argumentUtils.hasArgument(arguments, cmdList.BUY.ARGUMENTS.RELOAD);
+end
+
+-- ---------------------------------------------------
+-- Get parameters for confirm only usage
+-- ---------------------------------------------------
+local function isConfirmOnly(arguments)
+  return argumentUtils.hasArgument(arguments, cmdList.BUY.ARGUMENTS.CONFIRM_ONLY);
+end
+
+
+-- ---------------------------------------------------
+-- Get parameters for price limiting
+-- ---------------------------------------------------
+local function hasPriceLimit(arguments)
+  return argumentUtils.hasArgument(arguments, cmdList.BUY.ARGUMENTS.MAX_PRICE);
+end
+
+-- ---------------------------------------------------
+-- Get parameters for price limiting value
+-- ---------------------------------------------------
+local function getPriceLimit(arguments)
+  local pattern = patternMatchingUtils.escapeString(cmdList.BUY.ARGUMENTS.MAX_PRICE) .. "=" .. ".*";
+  local limitParam = string.match(arguments, pattern .. "%s") or string.match(arguments, pattern .. "$");
+
+  if (limitParam) then
+    local totalPrice = patternMatchingUtils.parsePriceFromArguments(limitParam);
+    return totalPrice;
+  else
+    return 0;
   end
-
-  local hasCommodities = AuctionHouseFrame.CommoditiesBuyFrame:IsVisible();
-
-  if (AuctionHouseFrame.BuyDialog:IsVisible()) then
-    if (AuctionHouseFrame.BuyDialog.BuyNowButton:IsVisible()) then
-      return confirmBuy()
-    elseif (AuctionHouseFrame.BuyDialog.OkayButton:IsVisible()) then
-      return confirmBuyDismissModal();
-    end
-  elseif (hasCommodities) then
-    return selectCommoditiesRow(arguments);
-  end
-
-  log:gray("No frames or enabled buttons, skip ops");
 end
 
 -- ---------------------------------------------------
 -- Try to buy the item from menu dialog
 -- ---------------------------------------------------
-function confirmBuy()
+local function confirmBuy()
   if (AuctionHouseFrame.BuyDialog.BuyNowButton:IsEnabled()) then
     local hasGoldPrice = AuctionHouseFrame.BuyDialog.PriceFrame.GoldDisplay.Text:IsVisible();
     local goldPrice = hasGoldPrice and AuctionHouseFrame.BuyDialog.PriceFrame.GoldDisplay.Text:GetText() or "0";
@@ -49,7 +69,7 @@ end
 -- ---------------------------------------------------
 -- Item is not up-to-date, confirm and start again
 -- ---------------------------------------------------
-function confirmBuyDismissModal()
+local function confirmBuyDismissModal()
   log:gray("Perform okay click, ops dismissed");
   AuctionHouseFrame.BuyDialog.OkayButton:Click();
 end
@@ -57,7 +77,7 @@ end
 -- ---------------------------------------------------
 -- Select first row and confirm buy ops
 -- ---------------------------------------------------
-function selectCommoditiesRow(arguments)
+local function selectCommoditiesRow(arguments)
   local isScalpEnabled = isScalp(arguments);
   local isConfirmOnlyEnabled = isConfirmOnly(arguments);
   local isPriceLimitEnabled = hasPriceLimit(arguments);
@@ -136,51 +156,29 @@ end
 -- ---------------------------------------------------
 -- Refresh commodities list
 -- ---------------------------------------------------
-function refreshCommodityList()
+local function refreshCommodityList()
   if (AuctionHouseFrame.CommoditiesBuyFrame.ItemList.RefreshFrame:IsVisible()) then
     AuctionHouseFrame.CommoditiesBuyFrame.ItemList.RefreshFrame.RefreshButton:Click();
   end
 end
 
--- ---------------------------------------------------
--- Get parameters for price limiting
--- ---------------------------------------------------
-function hasPriceLimit(arguments)
-  return argumentUtils.hasArgument(arguments, cmdList.BUY.ARGUMENTS.MAX_PRICE);
-end
-
--- ---------------------------------------------------
--- Get parameters for price limiting value
--- ---------------------------------------------------
-function getPriceLimit(arguments)
-  local pattern = cmdList.BUY.ARGUMENTS.MAX_PRICE .. "=" .. ".*";
-  local limitParam = string.match(arguments, pattern .. "%s") or string.match(arguments, pattern .. "$");
-
-  if (limitParam) then
-    local totalPrice = patternMatchingUtils.parse_price_from_arguments(limitParam);
-    return totalPrice;
-  else
-    return 0;
+function SlashCmdList.AH_BUY(arguments)
+  if (not AuctionHouseFrame) then
+    log:gray("No AH open detected");
+    return;
   end
-end
 
--- ---------------------------------------------------
--- Get parameters for scalp usage
--- ---------------------------------------------------
-function isScalp(arguments)
-  return argumentUtils.hasArgument(arguments, cmdList.BUY.ARGUMENTS.SCALP);
-end
+  local hasCommodities = AuctionHouseFrame.CommoditiesBuyFrame:IsVisible();
 
--- ---------------------------------------------------
--- Get parameters for reload usage
--- ---------------------------------------------------
-function isReload(arguments)
-  return argumentUtils.hasArgument(arguments, cmdList.BUY.ARGUMENTS.RELOAD);
-end
+  if (AuctionHouseFrame.BuyDialog:IsVisible()) then
+    if (AuctionHouseFrame.BuyDialog.BuyNowButton:IsVisible()) then
+      return confirmBuy()
+    elseif (AuctionHouseFrame.BuyDialog.OkayButton:IsVisible()) then
+      return confirmBuyDismissModal();
+    end
+  elseif (hasCommodities) then
+    return selectCommoditiesRow(arguments);
+  end
 
--- ---------------------------------------------------
--- Get parameters for confirm only usage
--- ---------------------------------------------------
-function isConfirmOnly(arguments)
-  return argumentUtils.hasArgument(arguments, cmdList.BUY.ARGUMENTS.CONFIRM_ONLY);
+  log:gray("No frames or enabled buttons, skip ops");
 end

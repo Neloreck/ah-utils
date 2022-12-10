@@ -2,12 +2,12 @@ local addonName, addon = ...;
 
 addon.cmd.list = {
   BUY = {
-    DEFAULT = "/ahbuy";
-    SHORT = "/ahb";
+    DEFAULT = "/ah_buy";
+    SHORT = "/ah_b";
     ARGUMENTS = {
       SCALP = "-scalp";
       CONFIRM_ONLY = "-confirm-only";
-      MAX_PRICE = "-max_price";
+      MAX_PRICE = "-max-price";
       RELOAD = "-reload";
     };
     DESCRIPTION = [[Automated buy process for automated buyout of first cheapest row of commodities.
@@ -19,18 +19,21 @@ Arguments:
 [-max_price] - supply maximal price to prevent buyout of expensive enties, example: -max_price=1g25s.]];
   };
   HELP = {
-    DEFAULT = "/ahhelp";
-    SHORT = "/ahh";
+    DEFAULT = "/ah_help";
+    SHORT = "/ah_h";
     DESCRIPTION = "Print commands list and descriptions for them.";
   };
   REFRESH = {
-    DEFAULT = "/ahrefresh";
-    SHORT = "/ahr";
+    DEFAULT = "/ah_refresh";
+    SHORT = "/ah_r";
     DESCRIPTION = "Refresh AH commodities list.";
   };
   UNDERCUT = {
-    DEFAULT = "/ahundercut";
-    SHORT = "/ahu";
+    DEFAULT = "/ah_undercut";
+    SHORT = "/ah_u";
+    ARGUMENTS = {
+      SET_PRICE = "-set-price";
+    };
     DESCRIPTION = "Post selected item with 1s value, fast init for commodities scalping.";
   };
 };

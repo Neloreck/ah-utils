@@ -4,9 +4,6 @@ local Logger = addon.utils.logging.Logger;
 
 local log = Logger:new({ prefix = "AhHelp" });
 
-SLASH_AH_HELP1 = cmdList.HELP.DEFAULT;
-SLASH_AH_HELP2 = cmdList.HELP.SHORT;
-
 function SlashCmdList.AH_HELP()
     log:green("Commands list for AH utils addon:");
     local index = 0;

@@ -13,8 +13,8 @@ function Logger:new(obj)
   return obj;
 end
 
-function printLoggerEntry(prefix, text, color)
-  print(WrapTextInColorCode("[" .. prefix .. "] " .. text, color));
+local function printLoggerEntry(prefix, text, color)
+  print(WrapTextInColorCode("[" .. prefix .. "] " .. text or "", color));
 end
 
 function Logger:darkGreen(text)

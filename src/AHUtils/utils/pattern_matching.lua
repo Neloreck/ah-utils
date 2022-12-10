@@ -4,7 +4,7 @@ local pattern_matching = {};
 -- ---------------------------------------------------
 -- Parse total value from '*g*s' pattern
 -- ---------------------------------------------------
-pattern_matching.parse_price_from_arguments = function (arguments)
+local function parsePriceFromArguments(arguments)
   local goldValue = string.match(arguments, "%d+g");
   local silverValue = string.match(arguments, "%d+s")
 
@@ -14,4 +14,13 @@ pattern_matching.parse_price_from_arguments = function (arguments)
   return (goldValue and tonumber(goldValue) or 0) * 100 + (silverValue and tonumber(silverValue) or 0);
 end
 
-addon.utils.pattern_matching = pattern_matching;
+-- ---------------------------------------------------
+-- Escaping provided string for correct pattern matching
+-- ---------------------------------------------------
+function escapeString(text)
+  return text:gsub("([^%w])", "%%%1")
+end
+
+addon.utils.pattern_matching = {};
+addon.utils.pattern_matching.parsePriceFromArguments = parsePriceFromArguments;
+addon.utils.pattern_matching.escapeString = escapeString;
