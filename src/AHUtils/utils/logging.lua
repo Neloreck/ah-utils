@@ -3,6 +3,10 @@ local EColor = addon.utils.color.EColor;
 
 local Logger = { prefix = "LOG" };
 
+local function printLoggerEntry(prefix, text, color)
+  print(WrapTextInColorCode("[" .. prefix .. "] " .. text or "", color));
+end
+
 -- ---------------------------------------------------
 -- Logger class to print prefixed messages
 -- ---------------------------------------------------
@@ -11,10 +15,6 @@ function Logger:new(obj)
   setmetatable(obj, self);
   self.__index = self;
   return obj;
-end
-
-local function printLoggerEntry(prefix, text, color)
-  print(WrapTextInColorCode("[" .. prefix .. "] " .. text or "", color));
 end
 
 function Logger:darkGreen(text)

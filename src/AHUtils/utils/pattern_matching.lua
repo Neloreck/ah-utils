@@ -17,7 +17,7 @@ end
 -- ---------------------------------------------------
 -- Escaping provided string for correct pattern matching
 -- ---------------------------------------------------
-function escapeString(text)
+local function escapeString(text)
   return text:gsub("([^%w])", "%%%1")
 end
 
